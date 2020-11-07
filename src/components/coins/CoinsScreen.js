@@ -4,6 +4,8 @@ import {View, Text, Pressable, StyleSheet} from 'react-native';
 class CoinsScreen extends Component {
   handlePress = () => {
     console.log('go to detail', this.props);
+
+    this.props.navigation.navigate('CoinDetail');
   };
 
   render() {

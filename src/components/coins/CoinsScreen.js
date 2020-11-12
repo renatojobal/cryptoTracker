@@ -1,15 +1,29 @@
 import React, {Component} from 'react';
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+} from 'react-native';
 import Http from 'cryptoTracker/src/libs/http';
+import CoinsItem from './CoinsItem';
 
 class CoinsScreen extends Component {
+  state = {
+    coins: [],
+    loading: false,
+  };
 
   componentDidMount = async () => {
-    const coins = await Http.instance.get("https://api.coinlore.net/api/tickers/");
+    this.setState({loading: true});
+    const res = await Http.instance.get(
+      'https://api.coinlore.net/api/tickers/',
+    );
 
-    console.log("coins", coins);
-
-  }
+    this.setState({coins: res.data, loading: false});
+  };
 
   handlePress = () => {
     console.log('go to detail', this.props);
@@ -18,12 +32,15 @@ class CoinsScreen extends Component {
   };
 
   render() {
+    const {coins, loading} = this.state;
+
     return (
       <View style={styles.container}>
-        <Text style={styles.titleText}>Coins screen</Text>
-        <Pressable style={styles.btn} onPress={this.handlePress}>
-          <Text style={styles.btnTex}>Go to detail</Text>
-        </Pressable>
+        {loading ? <ActivityIndicator style={styles.loader} color="#fff" size="large" /> : null}
+        <FlatList
+          data={coins}
+          renderItem={({item}) => <CoinsItem item={item} />}
+        />
       </View>
     );
   }
@@ -31,23 +48,25 @@ class CoinsScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: "red",
-
+    flex: 1,
+    backgroundColor: '#fff',
   },
   titleText: {
-      color: "#fff",
-      textAlign: "center"
+    color: '#fff',
+    textAlign: 'center',
   },
   btn: {
-      padding: 8,
-      backgroundColor: "blue",
-      borderRadius: 8,
-      margin: 16
+    padding: 8,
+    backgroundColor: 'blue',
+    borderRadius: 8,
+    margin: 16,
   },
   btnTex: {
-    color: "#fff",
-    textAlign: "center"
+    color: '#fff',
+    textAlign: 'center',
+  },
+  loader: {
+    marginTop: 60
   }
 });
 

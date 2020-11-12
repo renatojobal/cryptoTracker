@@ -3,8 +3,8 @@ class Http {
 
     get = async (url) => {
         try {
-            let request = await fetch(url);
-            let json = await request.json();
+            let req = await fetch(url);
+            let json = await req.json();
             return json;
         } catch (error) {
             console.log("Http GET method error ", error);

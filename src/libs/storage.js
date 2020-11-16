@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import AxyncStorage from '@react-native-community/async-storage';
+
 
 class Storage {
-  static instace = Storage();
+
+    
+  static instance = new Storage();
 
   store = async (key, value) => {
     try {
@@ -58,3 +60,5 @@ class Storage {
     }
   };
 }
+
+export default Storage;
